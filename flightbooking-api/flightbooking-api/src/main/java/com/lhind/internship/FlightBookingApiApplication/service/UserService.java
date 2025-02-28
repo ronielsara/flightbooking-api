@@ -32,25 +32,24 @@ public class UserService {
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.userMapper = userMapper;
-        this.userDetailsMapper = userDetailsMapper;  // ✅ Injected via constructor
+        this.userDetailsMapper = userDetailsMapper;
         this.userDetailsRepository = userDetailsRepository;
     }
 
-    // ✅ Get all users and their user details
     public List<UserResource> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toResource)
                 .collect(Collectors.toList());
     }
 
-    // ✅ Get a specific user and their user details
+
     public UserResource getUserById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return userMapper.toResource(user);
     }
 
-    // ✅ Get all users and their user details who have booked on a specific flight
+
     public List<UserResource> getUsersByFlight(Long flightId) {
         List<Booking> bookings = bookingRepository.findByFlightId(flightId);
         return bookings.stream()
