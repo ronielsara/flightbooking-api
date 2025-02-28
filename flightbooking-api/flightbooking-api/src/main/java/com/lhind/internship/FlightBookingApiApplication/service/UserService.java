@@ -7,7 +7,6 @@ import com.lhind.internship.FlightBookingApiApplication.model.entity.User;
 import com.lhind.internship.FlightBookingApiApplication.model.entity.UserDetails;
 import com.lhind.internship.FlightBookingApiApplication.model.resource.UserResource;
 import com.lhind.internship.FlightBookingApiApplication.repository.BookingRepository;
-import com.lhind.internship.FlightBookingApiApplication.repository.UserDetailsRepository;
 import com.lhind.internship.FlightBookingApiApplication.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -24,16 +23,14 @@ public class UserService {
     private final BookingRepository bookingRepository;
     private final UserMapper userMapper;
     private final UserDetailsMapper userDetailsMapper;
-    private final UserDetailsRepository userDetailsRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, BookingRepository bookingRepository,
-                       UserMapper userMapper, UserDetailsMapper userDetailsMapper, UserDetailsRepository userDetailsRepository) {
+                       UserMapper userMapper, UserDetailsMapper userDetailsMapper) {
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.userMapper = userMapper;
         this.userDetailsMapper = userDetailsMapper;
-        this.userDetailsRepository = userDetailsRepository;
     }
 
     public List<UserResource> getAllUsers() {
