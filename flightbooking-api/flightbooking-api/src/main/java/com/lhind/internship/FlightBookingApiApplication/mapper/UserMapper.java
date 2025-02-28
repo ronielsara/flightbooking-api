@@ -5,6 +5,7 @@ import com.lhind.internship.FlightBookingApiApplication.model.entity.UserDetails
 import com.lhind.internship.FlightBookingApiApplication.model.resource.UserDetailsResource;
 import com.lhind.internship.FlightBookingApiApplication.model.resource.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +13,11 @@ public class UserMapper {
 
     @Autowired
     private UserDetailsMapper userDetailsMapper;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserMapper(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public UserResource toResource(User user) {
         if (user == null) return null;
@@ -30,14 +36,14 @@ public class UserMapper {
         user.setId(resource.id());
         user.setUsername(resource.username());
         user.setRole(resource.role());
-        user.setPassword(resource.password());
+        user.setPassword(passwordEncoder.encode(resource.password()));
         return user;
     }
 
     public void updateUser(final User user, final UserResource resource) {
         user.setUsername(resource.username());
         user.setRole(resource.role());
-        user.setPassword(resource.password());
+        user.setPassword(passwordEncoder.encode(resource.password()));
 
         if (resource.userDetails() != null) {
             if (user.getUserDetails() == null) {

@@ -7,7 +7,6 @@ import com.lhind.internship.FlightBookingApiApplication.model.entity.User;
 import com.lhind.internship.FlightBookingApiApplication.model.entity.UserDetails;
 import com.lhind.internship.FlightBookingApiApplication.model.resource.UserResource;
 import com.lhind.internship.FlightBookingApiApplication.repository.BookingRepository;
-import com.lhind.internship.FlightBookingApiApplication.repository.UserDetailsRepository;
 import com.lhind.internship.FlightBookingApiApplication.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -24,33 +23,30 @@ public class UserService {
     private final BookingRepository bookingRepository;
     private final UserMapper userMapper;
     private final UserDetailsMapper userDetailsMapper;
-    private final UserDetailsRepository userDetailsRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, BookingRepository bookingRepository,
-                       UserMapper userMapper, UserDetailsMapper userDetailsMapper, UserDetailsRepository userDetailsRepository) {
+                       UserMapper userMapper, UserDetailsMapper userDetailsMapper) {
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.userMapper = userMapper;
-        this.userDetailsMapper = userDetailsMapper;  // ✅ Injected via constructor
-        this.userDetailsRepository = userDetailsRepository;
+        this.userDetailsMapper = userDetailsMapper;
     }
 
-    // ✅ Get all users and their user details
     public List<UserResource> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toResource)
                 .collect(Collectors.toList());
     }
 
-    // ✅ Get a specific user and their user details
+
     public UserResource getUserById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return userMapper.toResource(user);
     }
 
-    // ✅ Get all users and their user details who have booked on a specific flight
+
     public List<UserResource> getUsersByFlight(Long flightId) {
         List<Booking> bookings = bookingRepository.findByFlightId(flightId);
         return bookings.stream()
